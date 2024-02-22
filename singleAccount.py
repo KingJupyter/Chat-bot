@@ -38,13 +38,7 @@ for inputID in range(1, int(numberPrompt) + 1):
 with open('prompt.json', 'w') as file:
     json.dump(prompts, file)
 
-# Run Chrome driver.
-# service = Service(executable_path="C:\chromedriver-win64\chromedriver.exe")
-# options = Options()
-# options.add_experimental_option("debuggerAddress", "127.0.0.1:9030")
-# driver = webdriver.Chrome(service=service, options=options)
 driver = webdriver.Chrome()
-driver.maximize_window()
 chat_url = 'https://huggingface.co/chat/'
 driver.get(chat_url)
 sleep(1)
@@ -74,12 +68,12 @@ for i, element in enumerate(prompts, start = 1):
     enter_prompt.send_keys(element[f'prompt{i}'])
     sleep(1)
     enter_prompt.send_keys(Keys.ENTER)
-    sleep(20)
+    print(f'Type {element[f"prompt{i}"]}')
+    sleep(60)
 
 # Save answers as jon file.
 answers = driver.find_elements(By.XPATH, '//*[@id="app"]/div[1]/div/div[1]/div/div/div')
-answer = []
-for i in range(1, len(answers), 2):
-    answer.append({f'answer {int((i - 1)/2 + 1)}' : answers[i].text})
-with open('answer.json', 'w') as file:
-    json.dump(answer, file)
+
+with open('answer.txt', 'w') as file:
+    for i in range(1, len(answers), 2):
+        file.write(answers[i].text + '\n')
