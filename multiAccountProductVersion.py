@@ -17,8 +17,7 @@ def Find_Element(driver : webdriver.Chrome, by, value : str) -> WebElement:
     return element
 
 def input_prompt():
-
-    for i in range(1, 3):
+    for i in range(1, 21):
         # Determine the number of prompt
         numberPrompt = input('Please input the number of prompt : ')
         prompts = []
@@ -30,7 +29,6 @@ def input_prompt():
             json.dump(prompts, file)
 
 def run_bot(driver_num, email, password):
-
     driver = webdriver.Chrome()
     chat_url = 'https://huggingface.co/chat/'
     driver.get(chat_url)
@@ -64,13 +62,12 @@ def run_bot(driver_num, email, password):
         print(f'Browser-{driver_num}, Prompt {element[f"prompt{i}"]}')
         sleep(60)
 
-    # Save answers as a text file.
-    answers = driver.find_elements(By.XPATH, '//*[@id="app"]/div[1]/div/div[1]/div/div/div')
-    with open(f'answer_{driver_num}.txt', 'w') as file:
-        for i in range(1, len(answers), 2):
-            file.write(f'{"-" * 5} Answer {int((i - 1)/2 + 1)} {"-" * 5}\n\n')
-            file.write(f'Prompt {int((i - 1)/2 + 1)} : {prompts[int((i - 1)/2)][f"prompt{int((i - 1)/2 + 1)}"]}\n')
-            file.write(f'Answer {int((i - 1)/2 + 1)} : {answers[i].text}\n\n')
+        # Save answers as a text file.
+        answers = driver.find_elements(By.XPATH, '//*[@id="app"]/div[1]/div/div[1]/div/div/div')
+        with open(f'answer_{driver_num}.txt', 'a') as file:
+            file.write(f'{"-" * 5} Answer {i} {"-" * 5}\n\n')
+            file.write(f'Prompt {i} : {element[f"prompt{i}"]}\n')
+            file.write(f'Answer {i} : {answers[i * 2 - 1].text}\n\n')
 
     driver.quit()
 
