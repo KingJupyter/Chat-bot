@@ -1,0 +1,2 @@
+python multiAccountProductVersion.py
+pause
